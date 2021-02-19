@@ -24,7 +24,7 @@ def weather():
             print(city, country)
             data = get_weather(cityName=city, isoCountry=country)
             response = app.response_class(
-                response=json.dumps(data),
+                response=json.dumps(data.__dict__),
                 status=200,
                 mimetype='application/json'
             )
