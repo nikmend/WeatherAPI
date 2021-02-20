@@ -1,18 +1,28 @@
 from flask import (
-    Flask, request
+    Flask, request, jsonify
 )
+from flask_caching import Cache
 import json
-from weather.openweathermap import get_weather
+from app.openweathermap import get_weather
+
+
 
 app = Flask(__name__)
+config = {
+    "DEBUG": True,
+    "CACHE_TYPE": "simple",
+    "CACHE_DEFAULT_TIMEOUT": 120
+}
+app.config.from_mapping(config)
+cache = Cache(app)
 
 
 @app.route('/')
 def index():
-    return 'this is my weather API!'
-
+    return jsonify('this is my app API!')
 
 @app.route('/weather', methods=['GET'])
+@cache.cached(timeout=120)
 def weather():
     try:
         if request.method == 'GET':
@@ -21,8 +31,8 @@ def weather():
             """
             city = request.args.get('city')
             country = request.args.get('country')
-            print(city, country)
-            data = get_weather(cityName=city, isoCountry=country)
+
+            data = get_weather(city_name=city, isoCountry=country)
             response = app.response_class(
                 response=json.dumps(data.__dict__),
                 status=200,
@@ -33,5 +43,3 @@ def weather():
     except Exception as e:
         return json.dumps({'error': str(e)})
 
-
-app.run()

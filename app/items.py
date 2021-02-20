@@ -1,7 +1,7 @@
 from json import dumps
 
 
-class Weather_Item:
+class WeatherItem:
 
     def __init__(self, location_name=None, temperature=None, wind=None, cloudiness=None, pressure=None, humidity=None,
                  sunrise=None, sunset=None, geo_coordinates=None, requested_time=None):
@@ -17,7 +17,7 @@ class Weather_Item:
         self.requested_time = requested_time
 
     def __str__(self):
-        return dumps(self.__dict__)
-    
+        return self.__dict__
+
     def __repr__(self):
-        return dumps(self.__dict__)
+        return self.__dict__
